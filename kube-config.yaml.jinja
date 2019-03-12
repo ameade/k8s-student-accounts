@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Config
+preferences: {}
+
+# Define the cluster
+clusters:
+- cluster:
+    certificate-authority-data: {{ cert_data }}
+    # You'll need the API endpoint of your Cluster here:
+    server: https://{{ k8s_api }}
+  name: class-cluster
+
+# Define the user
+users:
+- name: {{ name }}-user
+  user:
+    as-user-extra: {}
+    client-key-data: {{ cert_data }}
+    token: {{ token }}
+
+# Define the context: linking a user to a cluster
+contexts:
+- context:
+    cluster: class-cluster
+    namespace: {{ name }}
+    user: {{ name }}-user
+  name: {{ name }}
+
+# Define current context
+Current-context: {{ name }}
